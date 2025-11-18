@@ -2,6 +2,8 @@
 require_once 'env.php';
 require_once 'app/controllers/EstacionController.php';
 require_once 'app/controllers/AuthController.php';
+require_once 'app/controllers/AdminController.php';
+require_once 'app/controllers/ApiController.php';
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
@@ -9,6 +11,8 @@ $url = explode('/', $url);
 
 $estacionController = new EstacionController();
 $authController = new AuthController();
+$adminController = new AdminController();
+$apiController = new ApiController();
 
 switch ($url[0]) {
     case '':
@@ -45,6 +49,18 @@ switch ($url[0]) {
         break;
     case 'logout':
         $authController->logout();
+        break;
+    case 'administrator':
+        $adminController->administrator();
+        break;
+    case 'map':
+        $adminController->map();
+        break;
+    case 'admin-logout':
+        $adminController->logout();
+        break;
+    case 'api':
+        $apiController->handleRequest();
         break;
     default:
         $estacionController->landing();
