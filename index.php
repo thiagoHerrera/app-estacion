@@ -1,27 +1,53 @@
 <?php
 require_once 'env.php';
 require_once 'app/controllers/EstacionController.php';
+require_once 'app/controllers/AuthController.php';
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
 $url = explode('/', $url);
 
-$controller = new EstacionController();
+$estacionController = new EstacionController();
+$authController = new AuthController();
 
 switch ($url[0]) {
     case '':
     case 'landing':
-        $controller->landing();
+        $estacionController->landing();
         break;
     case 'panel':
-        $controller->panel();
+        $estacionController->panel();
         break;
     case 'detalle':
         $chipid = $url[1] ?? null;
-        $controller->detalle($chipid);
+        $estacionController->detalle($chipid);
+        break;
+    case 'login':
+        $authController->login();
+        break;
+    case 'register':
+        $authController->register();
+        break;
+    case 'validate':
+        $token_action = $url[1] ?? null;
+        $authController->validate($token_action);
+        break;
+    case 'blocked':
+        $token = $url[1] ?? null;
+        $authController->blocked($token);
+        break;
+    case 'recovery':
+        $authController->recovery();
+        break;
+    case 'reset':
+        $token_action = $url[1] ?? null;
+        $authController->reset($token_action);
+        break;
+    case 'logout':
+        $authController->logout();
         break;
     default:
-        $controller->landing();
+        $estacionController->landing();
         break;
 }
 ?>

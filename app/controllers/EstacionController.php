@@ -1,11 +1,13 @@
 <?php
 require_once 'app/models/EstacionModel.php';
+require_once 'app/utils/Session.php';
 
 class EstacionController {
     private $model;
     
     public function __construct() {
         $this->model = new EstacionModel();
+        Session::start();
     }
     
     public function landing() {
@@ -21,9 +23,15 @@ class EstacionController {
     }
     
     public function detalle($chipid) {
+        if (!Session::isLoggedIn()) {
+            header('Location: login');
+            exit;
+        }
+        
         $this->render('detalle', [
             'title' => 'Detalle de Estación',
-            'chipid' => $chipid
+            'chipid' => $chipid,
+            'user' => Session::getUser()
         ]);
     }
     
